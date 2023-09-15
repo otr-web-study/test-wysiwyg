@@ -8,7 +8,7 @@ const { buttons } = useToolbar();
 <template>
   <ul class="toolbar">
     <li class="toolbar__element" v-for="btn in buttons" :key="btn.name">
-      <TheButton>
+      <TheButton @click="btn.handler">
         <component v-if="btn.icon" :is="btn.icon" />
         {{ btn.text }}
       </TheButton>
@@ -18,9 +18,12 @@ const { buttons } = useToolbar();
 
 <style lang="css" scoped>
 .toolbar {
+  margin-top: 30px;
   display: flex;
+  flex-wrap: wrap;
   list-style: none;
   gap: 10px;
+  padding: 0;
 }
 
 .toolbar__element {

@@ -1,10 +1,12 @@
 <script setup>
 import EditorToolbar from '@/components/EditorToolbar/EditorToolbar.vue';
+import EditorContent from './components/EditorContent/EditorContent.vue';
 </script>
 
 <template>
   <main class="app">
     <EditorToolbar />
+    <EditorContent />
   </main>
 </template>
 

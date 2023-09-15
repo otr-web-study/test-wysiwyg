@@ -1,12 +1,56 @@
-import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'
+import { ref, computed } from 'vue';
+import { defineStore } from 'pinia';
+import contentData from '@/data/content.json';
 
-export const useCounterStore = defineStore('counter', () => {
-  const count = ref(0)
-  const doubleCount = computed(() => count.value * 2)
-  function increment() {
-    count.value++
-  }
+export const useEditorStore = defineStore('editor', () => {
+  const history = ref([contentData]);
+  const indexContent = ref(0);
+  const activeElement = ref(null);
 
-  return { count, doubleCount, increment }
-})
+  const content = computed(() => history.value[indexContent.value]);
+
+  const updateElementContent = (value, idx) => {
+    if (history.value[indexContent.value][idx].children) {
+      history.value[indexContent.value][idx].children = value;
+    }
+  };
+
+  const setActiveElement = (element, idx) => {
+    activeElement.value = {
+      element,
+      idx,
+    };
+  };
+
+  const addHistoryItem = (contentData) => {
+    history.value.splice(
+      indexContent.value + 1,
+      history.value.length - (indexContent.value + 1),
+      contentData,
+    );
+    indexContent.value++;
+  };
+
+  const prevHistoryItem = () => {
+    if (indexContent.value > 0) {
+      indexContent.value--;
+    }
+  };
+
+  const nextHistoryItem = () => {
+    if (indexContent.value < history.value.length - 1) {
+      indexContent.value++;
+    }
+  };
+
+  return {
+    content,
+    activeElement,
+    history,
+    updateElementContent,
+    setActiveElement,
+    prevHistoryItem,
+    nextHistoryItem,
+    addHistoryItem,
+  };
+});

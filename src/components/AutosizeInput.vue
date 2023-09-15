@@ -3,13 +3,18 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import autosize from 'autosize';
 
 defineProps({
-  modelValue: String,
+  value: String,
+  type: String,
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['input', 'focus']);
 
 const handleInput = (evt) => {
-  emit('update:modelValue', evt.target.value);
+  emit('input', evt.target.value);
+};
+
+const handleFocus = (evt) => {
+  emit('focus', evt.target);
 };
 
 const element = ref();
@@ -26,10 +31,16 @@ onBeforeUnmount(() => {
 <template>
   <textarea
     ref="element"
+    rows="1"
     @input="handleInput"
-    :value="modelValue"
-    :placeholder="placeholder"
-    class="autosize-input"
+    @focus="handleFocus"
+    :value="value"
+    :class="[
+      'autosize-input',
+      {
+        'autosize-input_type_heading': type === 'h2',
+      },
+    ]"
   />
 </template>
 
@@ -39,7 +50,14 @@ onBeforeUnmount(() => {
   resize: none;
   border: none;
   outline: none;
-  padding-block: 10px;
   background-color: transparent;
+  color: #eaeaea;
+  font-family: 'ubuntu';
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.autosize-input_type_heading {
+  font-size: 31px;
 }
 </style>
